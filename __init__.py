@@ -1,1 +1,1 @@
-from timekeeper.tkcontrol import start, stop
+from timekeeper.tkcontrol import TimeManager
