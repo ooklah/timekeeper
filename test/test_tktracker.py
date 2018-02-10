@@ -114,6 +114,31 @@ class TestTKTracker(unittest.TestCase):
         s()
         self.assertEqual(self.tk.laps, 2)
 
+    def test_start_time_lap(self):
+        """Test the start time value in first lap."""
+        self.tk.start()
+        s()
+        st = self.tk._lap[0]
+        self.assertEqual(self.tk.start_time, st)
+        self.tk.stop()
+
+    def test_start_time_no_start(self):
+        """Test there is no start value when not run."""
+        self.assertEqual(self.tk.start_time, None)
+
+    def test_start_time_laps(self):
+        """Test that the start time is picked up from the laps."""
+        self.tk.start()
+        s()
+        st = self.tk._lap[0]
+        self.tk.stop()
+        s()
+        self.tk.start()
+        s()
+        self.tk.stop()
+        self.assertEqual(self.tk.start_time, st)
+
+
 
 if __name__ == '__main__':
     unittest.main()

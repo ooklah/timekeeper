@@ -48,7 +48,24 @@ class TKTracker(object):
         return total_time
 
     @property
+    def start_time(self):
+        """Return the start time if there is one."""
+        # Get the inital lap value in laps
+        if len(self._total_laps):
+            return self._total_laps[0][0]
+        
+        # Unless we're in the first lap, get that value
+        if len(self._lap):
+            return self._lap[0]
+        
+        # This tracker has not been started yet.
+        return None
+
+    @property
     def laps(self):
+        """
+        Return the number of laps, including the current lap running.
+        """
         # Get previous laps
         count = len(self._total_laps)
         # Get the current lap
