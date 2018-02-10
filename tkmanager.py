@@ -4,7 +4,7 @@ Time Manager Class
 Creates and manages the individual time trackers.
 """
 
-class TimeManager(object):
+class TKManager(object):
 
     def __init__(self):
         """Tracker Manager."""
