@@ -73,3 +73,10 @@ class TKTracker(object):
             self.stop_flag = True
         else:
             raise TrackerStopError("Already stopped.")
+
+    def __repr__(self):
+        msg = "<Tracker (id:{}) (laps:{}) (time:{})>".format(
+            self.id, self.laps, self.elapsed_time
+        )
+
+        return msg
