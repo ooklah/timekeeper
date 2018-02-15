@@ -6,6 +6,8 @@ Keeps track of an individual timer/log object
 
 import time
 
+from timekeeper.tkcomm import calc_time, str_time
+
 class TrackerStartError(Exception):
     pass
 
@@ -90,6 +92,10 @@ class TKTracker(object):
             self.stop_flag = True
         else:
             raise TrackerStopError("Already stopped.")
+
+    def str_time(self):
+        """Return a string of time as D H M S"""
+        return str_time(*calc_time(self.elapsed_time))
 
     def __repr__(self):
         msg = "<Tracker (id:{}) (laps:{}) (time:{})>".format(

@@ -138,6 +138,12 @@ class TestTKTracker(unittest.TestCase):
         self.tk.stop()
         self.assertEqual(self.tk.start_time, st)
 
+    def test_str_time(self):
+        self.tk.start()
+        s(2)
+        self.tk.stop()
+        self.assertEqual(self.tk.str_time(), "0d 0h 0m 2s")
+
 
 
 if __name__ == '__main__':
