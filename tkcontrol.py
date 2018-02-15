@@ -7,6 +7,8 @@ import sys
 import time
 from threading import Thread, Event
 
+from timekeeper.tkclock import TKClock
+
 f_path = os.path.dirname(__file__)
 runfile = os.path.join(f_path, 'runfile')
 
@@ -107,51 +109,3 @@ class Timer(Thread):
 
     def _print_time(self, msg, d, h, m, s):
         print "{}: {:.0f}:{:.0f}:{:.0f}:{:.0f}".format(msg, d, h, m, s)
-
-
-
-    # def calc_time(self):
-    #     delta = self.delta()
-    #     min, sec = divmod(delta, 60)
-    #     hours, min = divmod(min, 60)
-    #     days, hours = divmod(hours, 24)
-    #     print "Elapsed Time: {:.0f}:{:.0f}:{:.0f}:{:.0f}".format(
-    #         days, hours, min, sec)
-
-
-class TimeManager(object):
-
-    def __init__(self):
-        self._threads = []
-
-    def start(self, tid=None):
-        if tid:
-            self._threads[tid - 1].restart()
-            return tid
-
-        t = Timer()
-        self._threads.append(t)
-        t.start()
-        return len(self._threads)
-
-    def stop(self, tid):
-        self._threads[tid - 1].stop()
-        self._threads[tid - 1].join()
-        return self._threads[tid - 1].results
-
-    def pause(self, tid):
-        self._threads[tid - 1].pause()
-
-
-# def start():)
-#     # with open(runfile, 'w') as rf:
-#     #     rf.write('start time')
-#     begin = time.time()
-#     t = Timer(begin)
-#     THREADS.append(t)
-#     t.start()
-#
-#
-# def stop():
-#     THREADS[0].stop()
-#     THREADS.pop()
