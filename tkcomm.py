@@ -2,6 +2,7 @@
 Common Functions.
 """
 
+
 def calc_time(delta):
     """Calculate d, m, h, m, and s from an int value."""
     mins, secs = divmod(delta, 60)

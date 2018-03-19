@@ -1,15 +1,19 @@
 """
 Time Tracker Class
 
-Keeps track of an individual timer/log object
+This is a single Event tracking class. It has no concept of project, department,
+or task or what have you. It will just keep track of a start time and an end
+time.
 """
 
 import time
 
 from timekeeper.tkcomm import calc_time, str_time
 
+
 class TrackerStartError(Exception):
     pass
+
 
 class TrackerStopError(Exception):
     pass
@@ -18,12 +22,18 @@ class TrackerStopError(Exception):
 class TKTracker(object):
 
     def __init__(self, id):
+        """
+        init for TKTracker.
+        :param id: (any) accepts something that can be used to identify this
+            particular even again when asked.
+        """
         super(TKTracker, self).__init__()
         self._id = id
         self._lap = []
         self._total_laps = []
         self.results = {}
         self.stop_flag = True
+        self.pause_flag = False
 
     @property
     def id(self):
@@ -92,6 +102,10 @@ class TKTracker(object):
             self.stop_flag = True
         else:
             raise TrackerStopError("Already stopped.")
+
+    def pause(self):
+        """Will pause the current tracker without setting a new 'lap.'"""
+        raise NotImplemented("This has not been created yet.")
 
     def str_time(self):
         """Return a string of time as D H M S"""
