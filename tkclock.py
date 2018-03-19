@@ -10,13 +10,28 @@ class Signal(object):
 
     def __init__(self):
         self._handles = []
+        self._block = False
 
     def connect(self, func):
         self._handles.append(func)
 
     def emit(self):
+        if self._block:
+            return
+
         for handle in self._handles:
             handle()
+
+    def block(self):
+        """Blocks the signals from firing."""
+        self._block = True
+
+    def unblock(self):
+        """
+        Unblocks the signals so they will fire next time they are
+        called.
+        """
+        self._block = False
 
 
 class TKClock(Thread):
