@@ -4,7 +4,8 @@ Time Manager Class
 Creates and manages the individual time trackers.
 """
 
-from timekeeper import tktracker
+from timekeeper import tktimer
+
 
 class TKManager(object):
 
@@ -23,7 +24,7 @@ class TKManager(object):
             self._trackers[tid - 1].restart()
             return tid
         count = len(self)
-        t = tktracker.TKTracker(count) + 1
+        t = tktimer.TKTimer(count)
         self._trackers.append(t)
         t.start()
         return len(self)

@@ -58,4 +58,3 @@ class TKClock(Thread):
 
     def is_stopped(self):
         return self.stop_flag
-        
