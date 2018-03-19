@@ -7,7 +7,7 @@ import unittest
 import time
 
 # Local
-from timekeeper.tktracker import TKTracker, TrackerStartError, TrackerStopError
+from timekeeper.tktimer import TKTimer, TimerStartError, TimerStopError
 
 
 def s(c=1):
@@ -15,10 +15,10 @@ def s(c=1):
     time.sleep(c)
 
 
-class TestTKTracker(unittest.TestCase):
+class TestTKTimer(unittest.TestCase):
 
     def setUp(self):
-        self.tk = TKTracker(1)
+        self.tk = TKTimer(1)
 
     def tearDown(self):
         self.tk = None
@@ -29,7 +29,7 @@ class TestTKTracker(unittest.TestCase):
         is called twice.
         """
         self.tk.start()
-        with self.assertRaises(TrackerStartError):
+        with self.assertRaises(TimerStartError):
             self.tk.start()
 
     def test_double_stop_fail(self):
@@ -38,12 +38,12 @@ class TestTKTracker(unittest.TestCase):
         """
         self.tk.start()
         self.tk.stop()
-        with self.assertRaises(TrackerStopError):
+        with self.assertRaises(TimerStopError):
             self.tk.stop()
 
     def test_stop_without_start(self):
         """Test that the tracker fails if stop is calle before start."""
-        with self.assertRaises(TrackerStopError):
+        with self.assertRaises(TimerStopError):
             self.tk.stop()
 
     # @unittest.SkipTest
@@ -59,7 +59,7 @@ class TestTKTracker(unittest.TestCase):
         """Test Starting and then starting the same tracker again."""
         self.tk.start()
         s()
-        with self.assertRaises(TrackerStartError):
+        with self.assertRaises(TimerStartError):
             self.tk.start()
 
     # @unittest.SkipTest
@@ -143,7 +143,6 @@ class TestTKTracker(unittest.TestCase):
         s(2)
         self.tk.stop()
         self.assertEqual(self.tk.str_time(), "0d 0h 0m 2s")
-
 
 
 if __name__ == '__main__':
