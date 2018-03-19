@@ -11,23 +11,23 @@ import time
 from timekeeper.tkcomm import calc_time, str_time
 
 
-class TrackerStartError(Exception):
+class TimerStartError(Exception):
     pass
 
 
-class TrackerStopError(Exception):
+class TimerStopError(Exception):
     pass
 
 
-class TKTracker(object):
+class TKTimer(object):
 
     def __init__(self, id):
         """
-        init for TKTracker.
+        init for TKTimer.
         :param id: (any) accepts something that can be used to identify this
             particular even again when asked.
         """
-        super(TKTracker, self).__init__()
+        super(TKTimer, self).__init__()
         self._id = id
         self._lap = []
         self._total_laps = []
@@ -62,7 +62,7 @@ class TKTracker(object):
     @property
     def start_time(self):
         """Return the start time if there is one."""
-        # Get the inital lap value in laps
+        # Get the initial lap value in laps
         if len(self._total_laps):
             return self._total_laps[0][0]
         
@@ -86,25 +86,25 @@ class TKTracker(object):
         return count
 
     def start(self):
-        """Start the tracker."""
+        """Start the timer."""
         if self.stop_flag:
             self._lap.append(time.time())
             self.stop_flag = False
         else:
-            raise TrackerStartError('Already running.')
+            raise TimerStartError('Already running.')
 
     def stop(self):
-        """Stop the tracker."""
+        """Stop the timer."""
         if not self.stop_flag:
             self._lap.append(time.time())
             self._total_laps.append(self._lap)
             self._lap = []
             self.stop_flag = True
         else:
-            raise TrackerStopError("Already stopped.")
+            raise TimerStopError("Already stopped.")
 
     def pause(self):
-        """Will pause the current tracker without setting a new 'lap.'"""
+        """Will pause the current timer without setting a new 'lap.'"""
         raise NotImplemented("This has not been created yet.")
 
     def str_time(self):
@@ -112,7 +112,7 @@ class TKTracker(object):
         return str_time(*calc_time(self.elapsed_time))
 
     def __repr__(self):
-        msg = "<Tracker (id:{}) (laps:{}) (time:{})>".format(
+        msg = "<Timer (id:{}) (laps:{}) (time:{})>".format(
             self.id, self.laps, self.elapsed_time
         )
 
