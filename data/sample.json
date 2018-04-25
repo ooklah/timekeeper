@@ -1,0 +1,31 @@
+{
+  "metadata": {
+    "created": 0,
+    "last_updated": 0,
+    "project_name": "",
+    "version": 1,
+  },
+
+  "tasks": [
+    {
+      "name": "",
+      "id": 0,
+      // Sub groups off of this group
+      "children": [],
+      // open, closed, waiting
+      "status": "open"
+    }
+  ],
+
+  "records": {
+    "0" : [
+      {
+        "time_start": 0,
+        "time_elapsed": 0,
+        "notes": ""
+      },
+      {}
+    ],
+    "1" : [ ]
+  }
+}
