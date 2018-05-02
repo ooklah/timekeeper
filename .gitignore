@@ -58,3 +58,6 @@ docs/_build/
 # PyBuilder
 target/
 
+# Project Specific
+test/vars.py
+
