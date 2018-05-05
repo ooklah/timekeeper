@@ -4,6 +4,8 @@ Json Reader and writer class for the Time Keeper Module
 
 import json
 import os
+import datetime
+import time
 
 API_VERSION = 1
 
@@ -17,23 +19,25 @@ _METADATA = {
     "created": 0,
     "last_updated": 0,
     "project_name": "",
-    "api_version": API_VERSION
+    "api_version": API_VERSION,
+    "id_count": 0
 }
 
 _TASK = {
     "name": "",
     "id": 0,
     "children": [],
-    "status": open,
-    "type": "task"
+    "status": "open",
+    "type": "task",
+    "created": None
 }
 
 _RECORD = {
     "time_start": 0,
     "time_elapsed": 0,
-    "notes": ""
+    "notes": "",
+    "type": "record"
 }
-
 
 class TkJson:
 
@@ -63,7 +67,7 @@ class TkJson:
         """
         # Create the initial structure
         self._j = dict()
-        self._j[META] = _METADATA
+        self._j[META] = dict(_METADATA)
         self._j[META]['project_name'] = project_name
         self._j[TASK] = []
         self._j[RECORD] = {}
@@ -85,7 +89,68 @@ class TkJson:
         """Return the json api version."""
         return self._j[META]['api_version']
 
+    @property
+    def id_count(self):
+        """Return the current ID count."""
+        return self._j[META]['id_count']
+
+    def add_task(self, parent, name):
+        """Add in a new task from the parent location."""
+        t = dict(_TASK)
+        t['name'] = name
+        t['id'] = self._increment()
+        t['created'] = datetime.datetime.now()
+        if parent is None:
+            self._j[TASK].append(t)
+        else:
+            self.get_task(parent)["children"].append(t)
+
+        self._autosave()
+
+    def get_task(self, task_path):
+        """Return the task dictionary from the task path."""
+        task = TaskQuery(self._j[TASK]).get(task_path)
+        return task
+
     def _autosave(self):
         """Save data when it is changed."""
         with open(self._lp, 'w') as writer:
             json.dump(self._j, writer)
+
+    def _increment(self):
+        task_id = self.id_count + 1
+        self._j[META]['id_count'] = task_id
+        return self.id_count
+
+
+class DepthLimitReached(Exception):
+    pass
+
+
+class TaskQuery:
+    def __init__(self, data):
+        self.data = data
+        self.k = "/"
+
+    def get(self, path, pointer=None, c=0):
+        # print "--- {} ---".format(c)
+        if c == 100:
+            raise DepthLimitReached()
+
+        if pointer is None:
+            pointer = self.data
+
+        if path.count(self.k):
+            key, next = path.split(self.k, 1)
+        else:
+            key = path
+            next = None
+
+        for item in pointer:
+            name = item.get("name", None)
+            if name and name == key:
+                if next:
+                    return self.get(next, item["children"], c+1)
+                else:
+                    # print "Returning item", item
+                    return item
