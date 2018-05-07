@@ -79,6 +79,7 @@ class TkJson:
         self._lp = save_path
         self._autosave()
 
+    # ----- Metadata Access ---------------------------------------------------
     @property
     def project_name(self):
         """Returns the project name in the json file."""
@@ -94,17 +95,18 @@ class TkJson:
         """Return the current ID count."""
         return self._j[META]['id_count']
 
+    # ----- Task Access -------------------------------------------------------
     def add_task(self, parent, name):
         """Add in a new task from the parent location."""
         t = dict(_TASK)
         t['name'] = name
         t['id'] = self._increment()
-        t['created'] = datetime.datetime.now()
+        t['created'] = time.time()
         if parent is None:
             self._j[TASK].append(t)
         else:
             self.get_task(parent)["children"].append(t)
-
+        print self._j
         self._autosave()
 
     def get_task(self, task_path):
@@ -112,6 +114,17 @@ class TkJson:
         task = TaskQuery(self._j[TASK]).get(task_path)
         return task
 
+    def get_task_id(self, task_path):
+        """Return the task ID of the selected task"""
+        task = self.get_task(task_path)
+        return task["id"]
+
+    # ----- Record Access -----------------------------------------------------
+    def add_record(self, task_id, time_start, time_elapsed, notes=""):
+        """Add a record to a particular task."""
+        pass
+
+    # ----- Internal Functions ------------------------------------------------
     def _autosave(self):
         """Save data when it is changed."""
         with open(self._lp, 'w') as writer:
@@ -134,7 +147,7 @@ class TaskQuery:
 
     def get(self, path, pointer=None, c=0):
         # print "--- {} ---".format(c)
-        if c == 100:
+        if c == 10:
             raise DepthLimitReached()
 
         if pointer is None:

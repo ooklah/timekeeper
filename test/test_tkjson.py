@@ -52,6 +52,16 @@ class TestTKJson(unittest.TestCase):
         self.assertEqual(task.get("name"), "chunk")
         self.assertEqual(task.get("id"), 3)
 
+    def test_get_task_id(self):
+        """Test getting back the task ID."""
+        self.j.add_task(None, "cookies")
+        tid = self.j.get_task_id("cookies")
+        self.assertEqual(tid, 1)
+
+    def test_add_record(self):
+        """Test adding a record to a particular task."""
+        self.j.add_task(None, "cookies")
+
 
 if __name__ == '__main__':
     unittest.main()
