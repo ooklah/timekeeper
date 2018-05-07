@@ -15,29 +15,37 @@ TASK = "tasks"
 RECORD = "records"
 
 # Default templates for the major data structures
-_METADATA = {
-    "created": 0,
-    "last_updated": 0,
-    "project_name": "",
-    "api_version": API_VERSION,
-    "id_count": 0
-}
+def create_metadata(project_name):
+    """Create a new metadata object."""
+    t = {
+        "created": time.time(),
+        "last_updated": time.time(),
+        "project_name": project_name,
+        "api_version": API_VERSION,
+        "id_count": 0
+    }
+    return t
 
-_TASK = {
-    "name": "",
-    "id": 0,
-    "children": [],
-    "status": "open",
-    "type": "task",
-    "created": None
-}
 
-_RECORD = {
-    "time_start": 0,
-    "time_elapsed": 0,
-    "notes": "",
-    "type": "record"
-}
+def create_task(name, task_id):
+    """Create a new task object."""
+    t = {
+        "name": name,
+        "id": task_id,
+        "children": [],
+        "status": "open",
+        "type": "task",
+        "created": time.time()
+    }
+    return t
+
+def create_record(time_start, time_elapsed, notes=""):
+    t = {
+        "time_start": time_start,
+        "time_elapsed": time_elapsed,
+        "notes": notes,
+        "type": "record"
+    }
 
 class TkJson:
 
@@ -67,8 +75,7 @@ class TkJson:
         """
         # Create the initial structure
         self._j = dict()
-        self._j[META] = dict(_METADATA)
-        self._j[META]['project_name'] = project_name
+        self._j[META] = create_metadata(project_name)
         self._j[TASK] = []
         self._j[RECORD] = {}
 
@@ -98,15 +105,13 @@ class TkJson:
     # ----- Task Access -------------------------------------------------------
     def add_task(self, parent, name):
         """Add in a new task from the parent location."""
-        t = dict(_TASK)
-        t['name'] = name
-        t['id'] = self._increment()
-        t['created'] = time.time()
+        t = create_task(name, self._increment())
+
         if parent is None:
             self._j[TASK].append(t)
         else:
             self.get_task(parent)["children"].append(t)
-        print self._j
+
         self._autosave()
 
     def get_task(self, task_path):
@@ -127,6 +132,7 @@ class TkJson:
     # ----- Internal Functions ------------------------------------------------
     def _autosave(self):
         """Save data when it is changed."""
+        self._j[META]["last_updated"] = time.time()
         with open(self._lp, 'w') as writer:
             json.dump(self._j, writer)
 
