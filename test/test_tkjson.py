@@ -58,9 +58,34 @@ class TestTKJson(unittest.TestCase):
         tid = self.j.get_task_id("cookies")
         self.assertEqual(tid, 1)
 
+    def test_add_task_return_id(self):
+        """Test getting back the task ID."""
+        tid = self.j.add_task(None, "cookies")
+        self.assertEqual(tid, 1)
+
     def test_add_record(self):
         """Test adding a record to a particular task."""
-        self.j.add_task(None, "cookies")
+        tid = self.j.add_task(None, "cookies")
+        r = self.j.add_record(tid, "start", "end", "these are some notes")
+        self.assertEqual(r.get('time_start'), "start")
+        self.assertEqual(r.get('time_elapsed'), "end")
+        self.assertEqual(r.get('notes'), "these are some notes")
+        self.assertEqual(len(self.j.records.keys()), 1)
+
+    def test_get_records(self):
+        """Test getting the records of a particular task."""
+        tida = self.j.add_task(None, "cookies")
+        tidb = self.j.add_task(None, "cupcakes")
+        self.j.add_record(tida, "sa", "ea", "na")
+        self.j.add_record(tidb, "sb", "eb", "nb")
+        self.j.add_record(tidb, "sc", "ec", "nc")
+        ra = self.j.get_records(tida)
+        self.assertEqual(len(ra), 1)
+        self.assertEqual(ra[0].get('time_start'), "sa")
+
+        rb = self.j.get_records(tidb)
+        self.assertEqual(len(rb), 2)
+        self.assertEqual(rb[1].get('time_start'), "sc")
 
 
 if __name__ == '__main__':

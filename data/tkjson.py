@@ -14,6 +14,7 @@ META = "metadata"
 TASK = "tasks"
 RECORD = "records"
 
+
 # Default templates for the major data structures
 def create_metadata(project_name):
     """Create a new metadata object."""
@@ -39,6 +40,7 @@ def create_task(name, task_id):
     }
     return t
 
+
 def create_record(time_start, time_elapsed, notes=""):
     t = {
         "time_start": time_start,
@@ -46,6 +48,8 @@ def create_record(time_start, time_elapsed, notes=""):
         "notes": notes,
         "type": "record"
     }
+    return t
+
 
 class TkJson:
 
@@ -113,6 +117,7 @@ class TkJson:
             self.get_task(parent)["children"].append(t)
 
         self._autosave()
+        return t.get('id')
 
     def get_task(self, task_path):
         """Return the task dictionary from the task path."""
@@ -125,9 +130,28 @@ class TkJson:
         return task["id"]
 
     # ----- Record Access -----------------------------------------------------
+    @property
+    def records(self):
+        return self._j[RECORD]
+
     def add_record(self, task_id, time_start, time_elapsed, notes=""):
         """Add a record to a particular task."""
-        pass
+        record = create_record(time_start, time_elapsed, notes)
+
+        if not self.records.get(task_id, None):
+            self.records[task_id] = []
+        self.records[task_id].append(record)
+
+        self._autosave()
+        return record
+
+    def get_records(self, task_id):
+        """
+        Get the records for a particular task id. No individual access to
+        the records here.
+        """
+
+        return self.records.get(task_id, None)
 
     # ----- Internal Functions ------------------------------------------------
     def _autosave(self):
