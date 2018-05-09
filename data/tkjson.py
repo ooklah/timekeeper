@@ -53,15 +53,9 @@ def create_record(time_start, time_elapsed, notes=""):
 
 class TkJson:
 
-    def __init__(self, load_path=None):
+    def __init__(self):
         self._j = None
         self._lp = None
-
-        if load_path:
-            if os.path.exists(load_path):
-                self.load(load_path)
-            else:
-                self.create_project(load_path)
 
     def load(self, load_path):
         """Load and validate the json file."""
@@ -92,27 +86,37 @@ class TkJson:
 
     # ----- Metadata Access ---------------------------------------------------
     @property
+    def meta(self):
+        """Access to the metadata dictionary."""
+        return self._j[META]
+
+    @property
     def project_name(self):
         """Returns the project name in the json file."""
-        return self._j[META]['project_name']
+        return self.meta['project_name']
 
     @property
     def api_version(self):
         """Return the json api version."""
-        return self._j[META]['api_version']
+        return self.meta['api_version']
 
     @property
     def id_count(self):
         """Return the current ID count."""
-        return self._j[META]['id_count']
+        return self.meta['id_count']
 
     # ----- Task Access -------------------------------------------------------
+    @property
+    def tasks(self):
+        """Access to tasks dictionary"""
+        return self._j[TASK]
+
     def add_task(self, parent, name):
         """Add in a new task from the parent location."""
         t = create_task(name, self._increment())
 
         if parent is None:
-            self._j[TASK].append(t)
+            self.tasks.append(t)
         else:
             self.get_task(parent)["children"].append(t)
 
@@ -121,7 +125,7 @@ class TkJson:
 
     def get_task(self, task_path):
         """Return the task dictionary from the task path."""
-        task = TaskQuery(self._j[TASK]).get(task_path)
+        task = TaskQuery(self.tasks).get(task_path)
         return task
 
     def get_task_id(self, task_path):
@@ -156,13 +160,13 @@ class TkJson:
     # ----- Internal Functions ------------------------------------------------
     def _autosave(self):
         """Save data when it is changed."""
-        self._j[META]["last_updated"] = time.time()
+        self.meta["last_updated"] = time.time()
         with open(self._lp, 'w') as writer:
             json.dump(self._j, writer)
 
     def _increment(self):
         task_id = self.id_count + 1
-        self._j[META]['id_count'] = task_id
+        self.meta['id_count'] = task_id
         return self.id_count
 
 
