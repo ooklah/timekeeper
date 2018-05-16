@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/ooklah/workspace/everfree/timekeeper/qt\tkMainWindow.ui'
 #
-# Created: Tue May 08 22:24:22 2018
+# Created: Tue May 15 19:30:10 2018
 #      by: pyside-uic 0.2.15 running on PySide 1.2.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,7 +17,7 @@ class Ui_TimeKeeperWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.horizontalLayout = QtGui.QHBoxLayout(self.centralwidget)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.taskTree = QtGui.QTreeWidget(self.centralwidget)
+        self.taskTree = QtGui.QTreeView(self.centralwidget)
         self.taskTree.setObjectName("taskTree")
         self.horizontalLayout.addWidget(self.taskTree)
         self.recordsTable = QtGui.QTableWidget(self.centralwidget)
