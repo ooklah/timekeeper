@@ -54,12 +54,15 @@ def create_record(time_start, time_elapsed, notes=""):
 class TkJson:
 
     def __init__(self):
+        # Internal json data structure.
         self._j = None
+        # Load path variable.
         self._lp = None
 
     def load(self, load_path):
         """Load and validate the json file."""
-        self._j = json.load(load_path)
+        with open(load_path) as fp:
+            self._j = json.load(fp)
         self._lp = load_path
 
     def create_project(self, project_name, save_path):
