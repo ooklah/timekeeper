@@ -52,6 +52,14 @@ class TestTKJson(unittest.TestCase):
         self.assertEqual(task.get("name"), "chunk")
         self.assertEqual(task.get("id"), 3)
 
+    def test_add_duplicate_task(self):
+        """Test that adding the same task name at the same level will fail."""
+        pass
+
+    def test_delete_task(self):
+        """Test deleting a task and all of it's records."""
+        pass
+
     def test_get_task_id(self):
         """Test getting back the task ID."""
         self.j.add_task(None, "cookies")

@@ -183,19 +183,27 @@ class TaskQuery:
         self.k = "/"
 
     def get(self, path, pointer=None, c=0):
+        """Recursive get query. Find the task from the given path."""
         # print "--- {} ---".format(c)
+        # Break, should never be this deep.
         if c == 10:
             raise DepthLimitReached()
 
+        # At the top of the tree
         if pointer is None:
             pointer = self.data
 
+        # Split off the first item in the path, save the rest for later.
         if path.count(self.k):
             key, next = path.split(self.k, 1)
         else:
             key = path
             next = None
 
+        # Go through the list of children until we find where the
+        # name matches the key. And if we have a next, then continue
+        # into those children to keep looking. Otherwise, we've found
+        # the item we're looking for.
         for item in pointer:
             name = item.get("name", None)
             if name and name == key:
