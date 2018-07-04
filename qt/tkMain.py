@@ -22,12 +22,8 @@ class TKMain(QtWidgets.QMainWindow):
         self._setup()
 
     def notsure(self, index):
-        print index
-        item = index.data(QtCore.Qt.DisplayRole)
-        print item
-        print index.model()
         item = self.model.itemFromIndex(index)
-        print item.parent
+        print item.name, item.path
 
     def _setup(self):
         """Window Setup."""

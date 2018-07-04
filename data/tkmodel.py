@@ -8,10 +8,10 @@ import tkjson
 
 def recursive_lookup(task, parent):
     t = TKItem(task.get('name', None), parent)
-    children = task.get('children', [])
-    if children:
-        for ch in children:
-            t.appendRow(recursive_lookup(ch, "{}/{}".format(parent, t.name)))
+    for ch in task.get('children', []):
+        t.appendRow(
+            recursive_lookup(
+                ch, "{}/{}".format(parent, ch.get('name'))))
     return t
 
 
@@ -34,6 +34,6 @@ class TkModel:
         parent = TKItem(self.js.project_name, None)
 
         for task in self.js.tasks:
-            parent.appendRow(recursive_lookup(task, None))
+            parent.appendRow(recursive_lookup(task, task.get('name')))
         self.model.appendRow(parent)
         return self.model
