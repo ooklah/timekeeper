@@ -23,7 +23,35 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableWidget" name="recordsTable"/>
+     <widget class="QTableWidget" name="recordsTable">
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>Time Started</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Total Time</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Journal Entry</string>
+       </property>
+      </column>
+     </widget>
     </item>
    </layout>
   </widget>

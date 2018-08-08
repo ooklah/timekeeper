@@ -21,16 +21,23 @@ class TKMain(QtWidgets.QMainWindow):
 
         self._setup()
 
-    def notsure(self, index):
+    def populate_table(self, task_id):
+        """Populate the table from the given task ID."""
+
+    def task_selected_cb(self, index):
+
         item = self.model.itemFromIndex(index)
-        print item.name, item.path
+
+        print item.name, item.path, item.id
+
+        self.populate_table(item.id)
 
     def _setup(self):
         """Window Setup."""
         self.qt = tkMainWindow.Ui_TimeKeeperWindow()
         self.qt.setupUi(self)
         self.qt.taskTree.setModel(self.model)
-        self.qt.taskTree.clicked.connect(self.notsure)
+        self.qt.taskTree.clicked.connect(self.task_selected_cb)
 
 
 if __name__ == '__main__':

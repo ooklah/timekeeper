@@ -168,6 +168,11 @@ class TkJson:
             json.dump(self._j, writer)
 
     def _increment(self):
+        """
+        Increment the id count. Don't touch this otherwise it could start
+        overwriting existing tasks or records. Or things could just
+        generally screw up.
+        """
         task_id = self.id_count + 1
         self.meta['id_count'] = task_id
         return self.id_count

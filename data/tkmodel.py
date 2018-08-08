@@ -8,6 +8,7 @@ import tkjson
 
 def recursive_lookup(task, parent):
     t = TKItem(task.get('name', None), parent)
+    t.id = task.get('id', -2)
     for ch in task.get('children', []):
         t.appendRow(
             recursive_lookup(
@@ -20,6 +21,7 @@ class TKItem(QtWidgets.QStandardItem):
         super(TKItem, self).__init__(name)
         self.name = name
         self.path = parent
+        self.id = -1
 
 
 class TkModel:
@@ -37,3 +39,7 @@ class TkModel:
             parent.appendRow(recursive_lookup(task, task.get('name')))
         self.model.appendRow(parent)
         return self.model
+
+    def get_records(self, task_id):
+
+        return self.js.get_records(task_id)
